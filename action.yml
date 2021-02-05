@@ -1,0 +1,9 @@
+name: 'Simple Android Emulator'
+description: 'Simple Android Emulator'
+runs:
+  using: "composite"
+  steps:
+    - run: echo Hello
+      shell: bash
+    - run: ${{ github.action_path }}/step-android-start-emulator.sh
+      shell: bash
