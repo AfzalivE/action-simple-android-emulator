@@ -5,5 +5,5 @@ runs:
   steps:
     - run: echo Hello
       shell: bash
-    - run: ${{ github.action_path }}/step-android-start-emulator.sh
+    - run: ${{ github.action_path }}/publish-report.sh
       shell: bash
