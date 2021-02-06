@@ -3,4 +3,5 @@
 echo "Hello report"
 time=$(date)
 echo ::set-output name=time::$time
-echo `ls -lah`
+echo `ls`
+cat README.md
