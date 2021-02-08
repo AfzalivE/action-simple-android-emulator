@@ -11,6 +11,7 @@ set -ex
 SDK=29
 DEVICE=pixel
 TIMEOUT=10
+ACTION_PATH=$1
 
 echo "Downloading Android emulator image $SDK"
 echo 'y' | $ANDROID_SDK_ROOT/tools/bin/sdkmanager --install "system-images;android-$SDK;google_apis;x86_64"
@@ -31,7 +32,7 @@ $ANDROID_SDK_ROOT/emulator/emulator -version | head -n 1
 # Print running devices.
 $ANDROID_SDK_ROOT/platform-tools/adb devices
 
-./android-wait-for-emulator.sh
+$ACTION_PATH/android-wait-for-emulator.sh
 
 echo "Keeping power on, disabling animations, spell checker, and autofill."
 # set it up: ensure it's on, disable animations, ime, spell checker and autofill.

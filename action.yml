@@ -40,7 +40,7 @@ runs:
     #   shell: bash
     # - run: echo "Waiting for AVD to start"
     #   shell: bash
-    - run: ${{ github.action_path }}/step-android-start-emulator.sh
+    - run: ${{ github.action_path }}/step-android-start-emulator.sh ${{ github.action_path }}
       shell: bash
     - run: echo "Running ${{ inputs.script }}"
       shell: bash
