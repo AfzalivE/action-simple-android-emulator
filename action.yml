@@ -1,9 +1,50 @@
 name: 'Simple Android Emulator'
-description: 'Simple Android Emulator'
+description: 'Parse junit xml report and publish as annotation'
+inputs:
+  sdk:
+    description: 'Which API level should the emulator be'
+    required: false
+    default: 29
+  device:
+    description: 'Which device profile should the emulator have'
+    required: false
+    default: pixel
+  timeout:
+    description: 'Timeout (in minutes) after which emulator will be forced to stop'
+    required: false
+    default: 100
+  script:
+    description: 'Gradle command to run after emulator is ready'
+    required: true
+    default: './gradlew connectedCheck'
 runs:
   using: "composite"
   steps:
-    - run: echo Hello
+    - run: echo "Running '${{ inputs.script }} on Android emulator with API ${{ inputs.sdk }}, device profile ${{ inputs.device }}. Timeout set to ${{ inputs.timeout }}."
       shell: bash
-    - run: ${{ github.action_path }}/publish-report.sh
+    # - run: echo "Downloading Android emulator image ${{ inputs.sdk }}"
+    #   shell: bash
+    # - run: echo 'y' | $ANDROID_SDK_ROOT/tools/bin/sdkmanager --install "system-images;android-${{ inputs.sdk }};google_apis;x86_64"
+    #   shell: bash
+    # - run: echo "Creating AVD"
+    #   shell: bash
+    # - run: echo 'no' | $ANDROID_SDK_ROOT/tools/bin/avdmanager create avd -n "emulator-${{ inputs.sdk }}" -d "${{ inputs.device }}" -k "system-images;android-${{ inputs.sdk }};google_apis;x86" -f
+    #   shell: bash
+    # - run: echo "Enable hardware keyboard"
+    #   shell: bash
+    # - run: printf 'hw.keyboard = yes\n' >> ~/.android/avd/"emulator-${{ inputs.sdk }}.avd"/config.ini
+    #   shell: bash
+    # - run: echo "Starting AVD"
+    #   shell: bash
+    # - run: nohup $ANDROID_SDK_ROOT/emulator/emulator -avd "emulator-${{ inputs.sdk }}" -no-snapshot -no-boot-anim -no-audio -no-window -delay-adb >/dev/null 2>&1 &
+    #   shell: bash
+    # - run: echo "Waiting for AVD to start"
+    #   shell: bash
+    - run: ${{ github.action_path }}/step-android-start-emulator.sh
+      shell: bash
+    - run: echo "Running ${{ inputs.script }}"
+      shell: bash
+    - run: echo "Stopping Android emulator"
+      shell: bash
+    - run: ${{ github.action_path }}/stop-android-emulator.sh
       shell: bash

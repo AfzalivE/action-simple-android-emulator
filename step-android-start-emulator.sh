@@ -11,20 +11,20 @@ TIMEOUT=10
 echo "starting emulator API $SDK"
 
 # Download image and create emulator.
-echo 'y' | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-$SDK;google_apis;x86_64"
-echo 'no' | $ANDROID_HOME/tools/bin/avdmanager create avd -n "emulator-$SDK" -d "$DEVICE" -k "system-images;android-$SDK;google_apis;x86" -f
+echo 'y' | $ANDROID_SDK_ROOT/tools/bin/sdkmanager --install "system-images;android-$SDK;google_apis;x86_64"
+echo 'no' | $ANDROID_SDK_ROOT/tools/bin/avdmanager create avd -n "emulator-$SDK" -d "$DEVICE" -k "system-images;android-$SDK;google_apis;x86" -f
 # Ensure hardware keyboard configuration is enabled, and set 1GB of RAM.
-printf 'hw.keyboard = yes\nhw.ramSize = 1024\n' >> ~/.android/avd/"emulator-$SDK.avd"/config.ini
+printf 'hw.keyboard = yes\n' >> ~/.android/avd/"emulator-$SDK.avd"/config.ini
 # Start emulator.
-nohup $ANDROID_HOME/emulator/emulator -avd "emulator-$SDK" -no-snapshot -no-boot-anim -no-audio -no-window -delay-adb >/dev/null 2>&1 &
+nohup $ANDROID_SDK_ROOT/emulator/emulator -avd "emulator-$SDK" -no-snapshot -no-boot-anim -no-audio -no-window -delay-adb >/dev/null 2>&1 &
 # Wait for it to start.
 sleep 1
 # Print emulator version.
-$ANDROID_HOME/emulator/emulator -version | head -n 1
+$ANDROID_SDK_ROOT/emulator/emulator -version | head -n 1
 # Print running devices.
-$ANDROID_HOME/platform-tools/adb devices
+$ANDROID_SDK_ROOT/platform-tools/adb devices
 # Wait for the device, and set it up: ensure it's on, disable animations, ime, spell checker and autofill.
-$ANDROID_HOME/platform-tools/adb </dev/null wait-for-device shell '
+$ANDROID_SDK_ROOT/platform-tools/adb </dev/null wait-for-device shell '
   ./android-wait-for-emulator.sh
   svc power stayon true;
   settings put global window_animation_scale 0;
