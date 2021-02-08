@@ -1,8 +1,12 @@
+#!/bin/bash
+
 # Starts an Android emulator using the specified sdk and device.
 # The emulator is setup to improve test reliability and reduce flakiness, by ensuring it doesn't lock itself,
 # increasing the long-press delay, and disabling animations, spellchecker, IME keyboard and autofill service.
 
 # Copied from https://github.com/Doist/PipelinesTemplates/blob/master/step-android-start-emulator.yml
+
+set -ex
 
 SDK=29
 DEVICE=pixel
@@ -12,7 +16,7 @@ echo "Downloading Android emulator image $SDK"
 echo 'y' | $ANDROID_SDK_ROOT/tools/bin/sdkmanager --install "system-images;android-$SDK;google_apis;x86_64"
 
 echo "Creating AVD"
-echo 'no' | $ANDROID_SDK_ROOT/tools/bin/avdmanager create avd -n "emulator-$SDK" -d "$DEVICE" -k "system-images;android-$SDK;google_apis;x86" -f
+echo 'no' | $ANDROID_SDK_ROOT/tools/bin/avdmanager create avd -n "emulator-$SDK" -d "$DEVICE" -k "system-images;android-$SDK;google_apis;x86_64" -f
 
 echo "Enable hardware keyboard"
 printf 'hw.keyboard = yes\n' >> ~/.android/avd/"emulator-$SDK.avd"/config.ini
