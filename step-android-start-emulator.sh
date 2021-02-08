@@ -8,24 +8,30 @@ SDK=29
 DEVICE=pixel
 TIMEOUT=10
 
-echo "starting emulator API $SDK"
-
-# Download image and create emulator.
+echo "Downloading Android emulator image $SDK"
 echo 'y' | $ANDROID_SDK_ROOT/tools/bin/sdkmanager --install "system-images;android-$SDK;google_apis;x86_64"
+
+echo "Creating AVD"
 echo 'no' | $ANDROID_SDK_ROOT/tools/bin/avdmanager create avd -n "emulator-$SDK" -d "$DEVICE" -k "system-images;android-$SDK;google_apis;x86" -f
-# Ensure hardware keyboard configuration is enabled, and set 1GB of RAM.
+
+echo "Enable hardware keyboard"
 printf 'hw.keyboard = yes\n' >> ~/.android/avd/"emulator-$SDK.avd"/config.ini
-# Start emulator.
+
+echo "Starting AVD"
 nohup $ANDROID_SDK_ROOT/emulator/emulator -avd "emulator-$SDK" -no-snapshot -no-boot-anim -no-audio -no-window -delay-adb >/dev/null 2>&1 &
-# Wait for it to start.
+
+echo "Waiting for AVD to start"
 sleep 1
 # Print emulator version.
 $ANDROID_SDK_ROOT/emulator/emulator -version | head -n 1
 # Print running devices.
 $ANDROID_SDK_ROOT/platform-tools/adb devices
-# Wait for the device, and set it up: ensure it's on, disable animations, ime, spell checker and autofill.
+
+./android-wait-for-emulator.sh
+
+echo "Keeping power on, disabling animations, spell checker, and autofill."
+# set it up: ensure it's on, disable animations, ime, spell checker and autofill.
 $ANDROID_SDK_ROOT/platform-tools/adb </dev/null wait-for-device shell '
-  ./android-wait-for-emulator.sh
   svc power stayon true;
   settings put global window_animation_scale 0;
   settings put global transition_animation_scale 0;
@@ -36,4 +42,4 @@ $ANDROID_SDK_ROOT/platform-tools/adb </dev/null wait-for-device shell '
   settings put secure autofill_service null;
   input keyevent 82;'
 
-  echo "Start emulator for API $SDK"
+  echo "Emulator ready"
