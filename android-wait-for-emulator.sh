@@ -3,7 +3,7 @@
 # Copied from https://github.com/mindrunner/docker-android-sdk/blob/master/tools/android-wait-for-emulator.sh
 # Modified with changes from https://github.com/ReactiveCircus/android-emulator-runner/blob/main/src/emulator-manager.ts
 
-set +e
+set -ex
 
 bootcompleted=""
 failcounter=0
