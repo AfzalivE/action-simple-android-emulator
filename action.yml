@@ -44,6 +44,8 @@ runs:
       shell: bash
     - run: echo "Running ${{ inputs.script }}"
       shell: bash
+    - run: ${{ inputs.script }}
+      shell: bash
     - run: echo "Stopping Android emulator"
       shell: bash
     - run: ${{ github.action_path }}/stop-android-emulator.sh
